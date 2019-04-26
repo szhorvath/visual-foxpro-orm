@@ -1,0 +1,46 @@
+{
+    "name": "szhorvath/visual-foxpro-orm",
+    "description": ":description",
+    "license": "license",
+    "authors": [
+        {
+            "name": "author name",
+            "email": "author email",
+            "homepage": "author homepage"
+        }
+    ],
+    "homepage": "https://github.com/szhorvath/visual-foxpro-orm",
+    "keywords": [
+        "Laravel",
+        "VisualFoxproORM"
+    ],
+    "require": {
+        "illuminate/support": "~5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~7.0",
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "~3.0",
+        "sempro/phpunit-pretty-print": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Szhorvath\\VisualFoxproORM\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Szhorvath\\VisualFoxproORM\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Szhorvath\\VisualFoxproORM\\VisualFoxproORMServiceProvider"
+            ],
+            "aliases": {
+                "VisualFoxproORM": "Szhorvath\\VisualFoxproORM\\Facades\\VisualFoxproORM"
+            }
+        }
+    }
+}
