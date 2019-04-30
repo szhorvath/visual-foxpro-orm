@@ -1,5 +1,5 @@
 # The license
 
-Copyright (c) author name <author email>
+Copyright (c) Sandor Horvath <Sandor Horvath z.sandor.horvath@gmail.com>
 
-...Add your license text here...
+All rights reserved. No warranty, explicit or implicit, provided.
