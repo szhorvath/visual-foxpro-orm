@@ -1,4 +1,4 @@
-# VisualFoxproORM
+# Visual Foxpro ORM
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Total Downloads][ico-downloads]][link-downloads]
@@ -12,7 +12,20 @@ This is where your description should go. Take a look at [contributing.md](contr
 Via Composer
 
 ``` bash
-$ composer require szhorvath/visualfoxproorm
+$ composer require szhorvath/visual-foxpro-orm
+```
+
+Add the following environmental variable to your `.env` file
+
+```php
+VFP_PROVIDER=VFPOLEDB.1
+VFP_SOURCE="//server/database.dbc"
+```
+
+You must publish the config file:
+
+```bash
+$ php artisan vendor:publish --provider="Szhorvath\\FoxproDB\\FoxproDBServiceProvider"
 ```
 
 ## Usage

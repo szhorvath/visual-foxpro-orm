@@ -1,10 +1,10 @@
 <?php
 
-namespace Szhorvath\VisualFoxproORM\Facades;
+namespace Szhorvath\FoxproDB\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class VisualFoxproORM extends Facade
+class FoxproDB extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -13,6 +13,6 @@ class VisualFoxproORM extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'visualfoxproorm';
+        return 'foxprodb';
     }
 }

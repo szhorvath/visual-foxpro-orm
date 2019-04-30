@@ -1,10 +1,11 @@
 <?php
 
-namespace Szhorvath\VisualFoxproORM;
+namespace Szhorvath\FoxproDB;
 
+use Szhorvath\FoxproDB\FoxproDB;
 use Illuminate\Support\ServiceProvider;
 
-class VisualFoxproORMServiceProvider extends ServiceProvider
+class FoxproDBServiceProvider extends ServiceProvider
 {
     /**
      * Perform post-registration booting of services.
@@ -31,11 +32,11 @@ class VisualFoxproORMServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/visualfoxproorm.php', 'visualfoxproorm');
+        $this->mergeConfigFrom(__DIR__.'/../config/foxprodb.php', 'foxprodb');
 
         // Register the service the package provides.
-        $this->app->singleton('visualfoxproorm', function ($app) {
-            return new VisualFoxproORM;
+        $this->app->singleton('foxprodb', function ($app) {
+            return new FoxproDB(config('foxprodb'));
         });
     }
 
@@ -46,9 +47,9 @@ class VisualFoxproORMServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['visualfoxproorm'];
+        return ['foxprodb'];
     }
-    
+
     /**
      * Console-specific booting.
      *
@@ -58,23 +59,23 @@ class VisualFoxproORMServiceProvider extends ServiceProvider
     {
         // Publishing the configuration file.
         $this->publishes([
-            __DIR__.'/../config/visualfoxproorm.php' => config_path('visualfoxproorm.php'),
-        ], 'visualfoxproorm.config');
+            __DIR__.'/../config/foxprodb.php' => config_path('foxprodb.php'),
+        ], 'foxprodb.config');
 
         // Publishing the views.
         /*$this->publishes([
             __DIR__.'/../resources/views' => base_path('resources/views/vendor/szhorvath'),
-        ], 'visualfoxproorm.views');*/
+        ], 'foxprodb.views');*/
 
         // Publishing assets.
         /*$this->publishes([
             __DIR__.'/../resources/assets' => public_path('vendor/szhorvath'),
-        ], 'visualfoxproorm.views');*/
+        ], 'foxprodb.views');*/
 
         // Publishing the translation files.
         /*$this->publishes([
             __DIR__.'/../resources/lang' => resource_path('lang/vendor/szhorvath'),
-        ], 'visualfoxproorm.views');*/
+        ], 'foxprodb.views');*/
 
         // Registering package commands.
         // $this->commands([]);
