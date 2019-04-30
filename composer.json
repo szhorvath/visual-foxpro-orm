@@ -1,12 +1,13 @@
 {
   "name": "szhorvath/visual-foxpro-orm",
-  "description": ":description",
-  "license": "license",
+  "description": "Laravel Package for Visual Foxpro",
+  "license": "MIT",
   "authors": [
     {
-      "name": "author name",
-      "email": "author email",
-      "homepage": "author homepage"
+      "name": "Sandor Horvath",
+      "email": "z.sandor.horvath@gmail.com",
+      "homepage": "https://github.com/szhorvath/visual-foxpro-orm",
+      "role": "Developer"
     }
   ],
   "homepage": "https://github.com/szhorvath/visual-foxpro-orm",
@@ -17,6 +18,7 @@
     "ORM"
   ],
   "require": {
+    "php": "~7.1",
     "illuminate/support": "~5"
   },
   "require-dev": {
