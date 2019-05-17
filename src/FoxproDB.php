@@ -45,11 +45,8 @@ class FoxproDB
     {
         $this->provider = $config['provider'];
         $this->source = $config['source'];
-
-        throw_if(!class_exists('COM'), new ClassNotFoundException('COM class not found'));
-        $this->connection = new COM("ADODB.Connection");
-
-        $this->open();
+        $this->openConnection();
+        $this->recordSet = new RecordSet();
     }
 
     /**
@@ -57,14 +54,16 @@ class FoxproDB
      *
      * @return void
      */
-    protected function open()
+    protected function openConnection()
     {
+        throw_if(!class_exists('COM'), new ClassNotFoundException('COM class not found'));
+
         try {
+            $this->connection = new COM("ADODB.Connection");
             $this->connection->Open("Provider={$this->provider};Data Source={$this->source};Collating Sequence=machine;Mode=Read;CursorType=Keyset");
         } catch (\Throwable $th) {
             throw new \Exception("Couldn't open connection", 1);
         }
-        return $this;
     }
 
     /**
@@ -75,8 +74,19 @@ class FoxproDB
      */
     public function query(string $query)
     {
-        $this->recordSet = $this->connection->Execute($query);
+        $this->recordSet->open($this->connection, $query);
+
         return $this;
+    }
+
+    /**
+     * Returns number of rows
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return $this->recordSet->count();
     }
 
     /**
@@ -99,9 +109,20 @@ class FoxproDB
      */
     public function get()
     {
-        $rs = RecordSet::parse($this->recordSet);
-        $data = $rs->toObject();
+        $data = $this->recordSet->collection();
+        $this->close();
 
+        return $data;
+    }
+
+    /**
+     * Returns paginated dataset
+     *
+     * @return Illuminate\Support\Collection|array
+     */
+    public function paginate(int $page = 1, int $perPage = 10)
+    {
+        $data = $this->recordSet->paginate($page, $perPage);
         $this->close();
 
         return $data;
@@ -114,7 +135,7 @@ class FoxproDB
      */
     public function close()
     {
-        $this->recordSet->Close();
+        $this->recordSet->close();
         $this->connection->Close();
         return $this;
     }

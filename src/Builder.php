@@ -7,4 +7,7 @@ namespace Szhorvath\FoxproDB;
  */
 class Builder
 {
+    public function __construct()
+    {
+    }
 }
