@@ -46,7 +46,6 @@ class FoxproDB
         $this->provider = $config['provider'];
         $this->source = $config['source'];
         $this->openConnection();
-        $this->recordSet = new RecordSet();
     }
 
     /**
@@ -74,6 +73,7 @@ class FoxproDB
      */
     public function query(string $query)
     {
+        $this->recordSet = new RecordSet();
         $this->recordSet->open($this->connection, $query);
 
         return $this;
@@ -116,6 +116,16 @@ class FoxproDB
     }
 
     /**
+     * Returns the first record
+     *
+     * @return Illuminate\Support\Collection|null
+     */
+    public function first()
+    {
+        return $this->recordSet->count() ? $this->get()[0] : null;
+    }
+
+    /**
      * Returns paginated dataset
      *
      * @return Illuminate\Support\Collection|array
@@ -136,7 +146,7 @@ class FoxproDB
     public function close()
     {
         $this->recordSet->close();
-        $this->connection->Close();
+        // $this->connection->Close();
         return $this;
     }
 }
