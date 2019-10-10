@@ -86,7 +86,7 @@ class FoxproDB
      */
     public function count()
     {
-        return $this->recordSet->count();
+        return $this->recordSet->count() > 0 ? $this->recordSet->count() : null;
     }
 
     /**
