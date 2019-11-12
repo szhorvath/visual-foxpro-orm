@@ -4,6 +4,7 @@ namespace Szhorvath\FoxproDB;
 
 use COM;
 use InvalidArgumentException;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Szhorvath\FoxproDB\Exceptions\ClassNotFoundException;
 
 /**
@@ -62,7 +63,7 @@ class RecordSet
      */
     public function count(): int
     {
-        return (int)$this->recordSet->RecordCount();
+        return (int) $this->recordSet->RecordCount();
     }
 
 
@@ -97,7 +98,7 @@ class RecordSet
      */
     public function headerCount(): int
     {
-        return (int)$this->recordSet->Fields->Count();
+        return (int) $this->recordSet->Fields->Count();
     }
 
 
@@ -127,7 +128,7 @@ class RecordSet
             foreach ($this->getHeaders() as $key => $header) {
                 $row[$header] = $this->encodeField($this->recordSet[$key]->Value);
             }
-            $data[] = (object)$row;
+            $data[] = (object) $row;
             $this->recordSet->MoveNext();
         }
 
@@ -144,7 +145,7 @@ class RecordSet
     public function paginate($page = 1, $perPage = 10)
     {
         if (!$this->count()) {
-            return collect([]);
+            return new LengthAwarePaginator([], 0, $perPage, $page, ['total_pages' => 0]);
         }
 
         $this->recordSet->PageSize = $perPage;
@@ -156,24 +157,19 @@ class RecordSet
             foreach ($this->getHeaders() as $key => $header) {
                 $row[$header] = $this->encodeField($this->recordSet[$key]->Value);
             }
-            $data[] = (object)$row;
+            $data[] = (object) $row;
 
             $this->recordSet->MoveNext();
             $rowCount++;
         }
 
-        $pagination               = new \stdClass;
-        $pagination->total        = $this->recordSet->RecordCount();
-        $pagination->per_page     = $perPage;
-        $pagination->current_page = $page;
-        $pagination->total_pages  = $this->recordSet->PageCount();
+        $total = $this->recordSet->RecordCount();
+        $total_pages = $this->recordSet->PageCount();
 
-        return collect([
-            'data' => $data,
-            'meta' => (object)[
-                'pagination' => $pagination
-            ],
-        ]);
+        $paginated = new LengthAwarePaginator($data, $total, $perPage, $page, ['total_pages' => $total_pages]);
+        $paginated->setPath(request()->url());
+
+        return $paginated;
     }
 
     /**
@@ -202,8 +198,14 @@ class RecordSet
      * @param string $value
      * @return string|null
      */
-    protected function encodeField(string $value)
+    protected function encodeField(?string $value)
     {
-        return trim(utf8_encode($value)) ?: null;
+        $value = trim(utf8_encode($value));
+
+        if ($value === "0") {
+            return 0;
+        }
+
+        return $value ?: null;
     }
 }
