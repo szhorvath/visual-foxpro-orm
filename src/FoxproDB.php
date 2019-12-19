@@ -3,6 +3,7 @@
 namespace Szhorvath\FoxproDB;
 
 use COM;
+use Szhorvath\FoxproDB\Audit;
 use Szhorvath\FoxproDB\RecordSet;
 use Szhorvath\FoxproDB\Exceptions\ClassNotFoundException;
 
@@ -21,6 +22,13 @@ class FoxproDB
      * @var string
      */
     protected $source;
+
+    /**
+     * Source database file
+     *
+     * @var bool
+     */
+    protected $audit;
 
     /**
      * Database driver
@@ -45,6 +53,7 @@ class FoxproDB
     {
         $this->provider = $config['provider'];
         $this->source = $config['source'];
+        $this->audit = $config['audit'];
         $this->openConnection();
     }
 
@@ -73,6 +82,10 @@ class FoxproDB
      */
     public function query(string $query)
     {
+        if ($this->audit) {
+            Audit::log($query);
+        }
+
         $this->recordSet = new RecordSet();
         $this->recordSet->open($this->connection, $query);
 

@@ -16,7 +16,7 @@ class FoxproDBServiceProvider extends ServiceProvider
     {
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'szhorvath');
         // $this->loadViewsFrom(__DIR__.'/../resources/views', 'szhorvath');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        // $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         // Publishing is only necessary when using the CLI.
@@ -32,7 +32,7 @@ class FoxproDBServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/foxprodb.php', 'foxprodb');
+        $this->mergeConfigFrom(__DIR__ . '/../config/foxprodb.php', 'foxprodb');
 
         // Register the service the package provides.
         $this->app->singleton('foxprodb', function ($app) {
@@ -59,8 +59,15 @@ class FoxproDBServiceProvider extends ServiceProvider
     {
         // Publishing the configuration file.
         $this->publishes([
-            __DIR__.'/../config/foxprodb.php' => config_path('foxprodb.php'),
+            __DIR__ . '/../config/foxprodb.php' => config_path('foxprodb.php'),
         ], 'foxprodb.config');
+
+        // Publishing the migration file.
+        $this->publishes([
+            __DIR__ . '/../database/migrations/audits.stub' => database_path(
+                sprintf('migrations/%s_create_foxpro_audits_table.php', date('Y_m_d_His'))
+            ),
+        ], 'migrations');
 
         // Publishing the views.
         /*$this->publishes([
