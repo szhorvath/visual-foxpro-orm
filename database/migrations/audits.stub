@@ -19,9 +19,9 @@ class CreateFoxproAuditsTable extends Migration
         Schema::create(static::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('user_id')->nullable()->index();
-            $table->text('query')->nullable();
+            $table->longText('query')->nullable();
             $table->ipAddress('ip')->nullable();
-            $table->string('url')->nullable();
+            $table->text('url')->nullable();
             $table->string('user_agent')->nullable();
             $table->timestamps();
         });
