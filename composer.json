@@ -18,13 +18,13 @@
     "ORM"
   ],
   "require": {
-    "php": "~7.1",
+    "php": ">=7.2",
     "illuminate/support": "^5.8|^6.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "~7.0",
-    "mockery/mockery": "^1.1",
-    "orchestra/testbench": "~3.0",
+    "phpunit/phpunit": "^8.0",
+    "mockery/mockery": "^1.0",
+    "orchestra/testbench": "^3.8",
     "sempro/phpunit-pretty-print": "^1.0"
   },
   "autoload": {
