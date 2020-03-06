@@ -24,6 +24,13 @@ class FoxproDB
     protected $source;
 
     /**
+     * Read or ReadWrite modes
+     *
+     * @var string
+     */
+    protected $mode;
+
+    /**
      * Source database file
      *
      * @var bool
@@ -53,6 +60,7 @@ class FoxproDB
     {
         $this->provider = $config['provider'];
         $this->source = $config['source'];
+        $this->mode = $config['mode'];
         $this->audit = $config['audit'];
         $this->openConnection();
     }
@@ -68,14 +76,14 @@ class FoxproDB
 
         try {
             $this->connection = new COM("ADODB.Connection");
-            $this->connection->Open("Provider={$this->provider};Data Source={$this->source};Collating Sequence=machine;Mode=Read;CursorType=Keyset");
+            $this->connection->Open("Provider={$this->provider};Data Source={$this->source};Collating Sequence=machine;Mode={$this->mode};CursorType=Keyset");
         } catch (\Throwable $th) {
-            throw new \Exception("Couldn't open connection", 1);
+            throw new \Exception($th->getMessage());
         }
     }
 
     /**
-     * Execute query
+     * Open a recordset
      *
      * @param string $query
      * @return void
@@ -90,6 +98,21 @@ class FoxproDB
         $this->recordSet->open($this->connection, $query);
 
         return $this;
+    }
+
+    /**
+     * Execute query
+     *
+     * @param string $query
+     * @return void
+     */
+    public function execute(string $query)
+    {
+        if ($this->audit) {
+            Audit::log($query);
+        }
+
+        return $this->connection->Execute($query);
     }
 
     /**
@@ -111,6 +134,19 @@ class FoxproDB
     public function setSource(string $source)
     {
         $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Sets mode
+     *
+     * @param string $mode
+     * @return void
+     */
+    public function setMode(string $mode)
+    {
+        $this->mode = $mode;
 
         return $this;
     }
