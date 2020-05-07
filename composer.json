@@ -5,9 +5,7 @@
   "authors": [
     {
       "name": "Sandor Horvath",
-      "email": "z.sandor.horvath@gmail.com",
-      "homepage": "https://github.com/szhorvath/visual-foxpro-orm",
-      "role": "Developer"
+      "email": "z.sandor.horvath@gmail.com"
     }
   ],
   "homepage": "https://github.com/szhorvath/visual-foxpro-orm",
@@ -18,8 +16,8 @@
     "ORM"
   ],
   "require": {
-    "php": ">=7.2",
-    "illuminate/support": "^5.8|^6.0"
+    "php": ">=7.2.5",
+    "illuminate/support": "^6.0|^7.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^8.0",

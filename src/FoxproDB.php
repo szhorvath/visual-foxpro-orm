@@ -165,6 +165,26 @@ class FoxproDB
     }
 
     /**
+     * Returns recodset
+     *
+     * @return RecordSet
+     */
+    public function getRecordSet()
+    {
+        return $this->recordSet;
+    }
+
+    /**
+     * Returns dataset
+     *
+     * @return Illuminate\Support\LazyCollection|array
+     */
+    public function cursor()
+    {
+        return $this->recordSet->lazyCollection();
+    }
+
+    /**
      * Returns the first record
      *
      * @return Illuminate\Support\Collection|null
