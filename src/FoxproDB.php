@@ -56,13 +56,15 @@ class FoxproDB
      *
      * @param iterable $config
      */
-    public function __construct(iterable $config)
+    public function __construct(iterable $config = [])
     {
-        $this->provider = $config['provider'];
-        $this->source = $config['source'];
-        $this->mode = $config['mode'];
-        $this->audit = $config['audit'];
-        $this->openConnection();
+        if (!empty($config)) {
+            $this->provider = $config['provider'];
+            $this->source = $config['source'];
+            $this->mode = $config['mode'];
+            $this->audit = $config['audit'];
+            $this->openConnection();
+        }
     }
 
     /**
@@ -159,9 +161,29 @@ class FoxproDB
     public function get()
     {
         $data = $this->recordSet->collection();
-        $this->close();
+        $this->recordSet->close();
 
         return $data;
+    }
+
+    /**
+     * Returns recodset
+     *
+     * @return RecordSet
+     */
+    public function getRecordSet()
+    {
+        return $this->recordSet;
+    }
+
+    /**
+     * Returns dataset
+     *
+     * @return Illuminate\Support\LazyCollection|array
+     */
+    public function cursor()
+    {
+        return $this->recordSet->lazyCollection();
     }
 
     /**
@@ -182,7 +204,7 @@ class FoxproDB
     public function paginate(int $page = 1, int $perPage = 10)
     {
         $data = $this->recordSet->paginate($page, $perPage);
-        $this->close();
+        $this->recordSet->close();
 
         return $data;
     }
@@ -194,8 +216,12 @@ class FoxproDB
      */
     public function close()
     {
-        $this->recordSet->close();
-        // $this->connection->Close();
+        $this->connection->Close();
         return $this;
+    }
+
+    public function __destruct()
+    {
+        $this->close();
     }
 }

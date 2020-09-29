@@ -4,6 +4,7 @@ namespace Szhorvath\FoxproDB;
 
 use COM;
 use InvalidArgumentException;
+use Illuminate\Support\LazyCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Szhorvath\FoxproDB\Exceptions\ClassNotFoundException;
 
@@ -133,6 +134,28 @@ class RecordSet
         }
 
         return collect($data);
+    }
+
+    /**
+     * Returns records as a collection
+     *
+     * @return Illuminate\Support\LazyCollection
+     */
+    public function lazyCollection()
+    {
+        if (!$this->count()) {
+            return collect([]);
+        }
+
+        return LazyCollection::make(function () {
+            while (!$this->recordSet->EOF) {
+                foreach ($this->getHeaders() as $key => $header) {
+                    $row[$header] = $this->encodeField($this->recordSet[$key]->Value);
+                }
+                yield (object) $row;
+                $this->recordSet->MoveNext();
+            }
+        });
     }
 
     /**
