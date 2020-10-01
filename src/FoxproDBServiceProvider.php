@@ -35,7 +35,7 @@ class FoxproDBServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/foxprodb.php', 'foxprodb');
 
         // Register the service the package provides.
-        $this->app->bind('foxprodb', function ($app) {
+        $this->app->singleton('foxprodb', function ($app) {
             return new FoxproDB(config('foxprodb'));
         });
     }
